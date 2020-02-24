@@ -1,3 +1,32 @@
+const sites = [
+  'http://tinytuba.com/',
+  'http://burymewithmymoney.com/',
+  'http://eelslap.com/',
+  'http://beesbeesbees.com/',
+  'http://www.staggeringbeauty.com/',
+  'https://chrismckenzie.com/',
+  'http://hasthelargehadroncolliderdestroyedtheworldyet.com/',
+  'http://corndog.io/',
+  'http://ihasabucket.com/',
+  'http://www.republiquedesmangues.fr/',
+  'http://www.rrrgggbbb.com/',
+  'http://imaninja.com/',
+  'http://www.movenowthinklater.com/',
+  'http://www.ismycomputeron.com/',
+  'https://happyhappyhardcore.com/',
+  'http://www.everydayim.com/',
+  'http://ninjaflex.com/',
+];
+
+const users = [
+  'alex',
+];
+
+const getRandomSite = () => {
+  let keys = Object.keys(sites);
+  let site = keys[Math.floor(Math.random() * keys.length)];
+  return site;
+};
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json'});
   response.write(JSON.stringify(object));
@@ -11,7 +40,7 @@ const randomRange = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-const getAllSites = (request, response, sites) => {
+const getAllSites = (request, response) => {
   // Create an object literal version of all the sites
   const jsonArray = Object.assign({}, sites);
   
@@ -23,12 +52,12 @@ const getAllSites = (request, response, sites) => {
   respondJSON(request, response, 200, responseJSON);
 };
 
-const getRandomSite = (request, response, sites) => {
+const getRandomSite = (request, response) => {
   let index = randomRange(0, sites.length);
 
   // Create the response where the message is the site
   const responseJSON = {
-    message: sites[index],
+    message: getRandomSite(),
     id: 'randomSite'
   };
 
@@ -43,7 +72,7 @@ const getUserPage = (request, response, sites, users) => {
   // If it is then take them to their custom page, where they can add a site and hopefully see their favorite sites
 };
 
-const submitSite = (request, response, sites, users, params, siteName) => {
+const submitSite = (request, response, params) => {
   // Check to see if they are signed in
 
   // If they're not send back an unauthorized response
@@ -53,6 +82,19 @@ const submitSite = (request, response, sites, users, params, siteName) => {
   // If it isn't then send back a response saying that the site isn't valid
 
   // If it is then add it to the list and send back a 200 response
+
+  const siteURL = params.siteURL;
+  const userName = "default user";
+  console.log(params);
+  console.log(siteURL);
+
+  sites[siteURL] = userName;
+
+  const object = {
+    "id": "",
+    "message": "Site added!",
+    "url": siteURL
+  }
 };
 
 const notFound = (request, response) => {

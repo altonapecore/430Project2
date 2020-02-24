@@ -16,29 +16,7 @@ const urlStruct = {
   notFound: jsonHandler.notFound
 };
 
-const sites = [
-  'http://tinytuba.com/',
-  'http://burymewithmymoney.com/',
-  'http://eelslap.com/',
-  'http://beesbeesbees.com/',
-  'http://www.staggeringbeauty.com/',
-  'https://chrismckenzie.com/',
-  'http://hasthelargehadroncolliderdestroyedtheworldyet.com/',
-  'http://corndog.io/',
-  'http://ihasabucket.com/',
-  'http://www.republiquedesmangues.fr/',
-  'http://www.rrrgggbbb.com/',
-  'http://imaninja.com/',
-  'http://www.movenowthinklater.com/',
-  'http://www.ismycomputeron.com/',
-  'https://happyhappyhardcore.com/',
-  'http://www.everydayim.com/',
-  'http://ninjaflex.com/',
-];
 
-const users = [
-  'alex',
-];
 
 const onRequest = (request, response) => {
   // parse the url using the url module
@@ -59,7 +37,7 @@ const onRequest = (request, response) => {
   // check if the path name (the /name part of the url) matches
   // any in our url object. If so call that function. If not, default to index.
   if (urlStruct[parsedUrl.pathname]) {
-    urlStruct[parsedUrl.pathname](request, response, sites, users, params, siteName, acceptedTypes);
+    urlStruct[parsedUrl.pathname](request, response, params);
   } else {
     urlStruct.notFound(request, response, params, acceptedTypes);
   }
