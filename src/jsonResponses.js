@@ -4,6 +4,7 @@ const respondJSON = (request, response, status, object) => {
   response.end();
 };
 
+// Helper function for the get random site to reduce the code there
 const randomRange = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -16,7 +17,7 @@ const getAllSites = (request, response, sites) => {
   
   const responseJSON = {
     message: jsonArray,
-    id: 'sites'
+    id: 'allSites'
   };
   
   respondJSON(request, response, 200, responseJSON);
@@ -28,14 +29,18 @@ const getRandomSite = (request, response, sites) => {
   // Create the response where the message is the site
   const responseJSON = {
     message: sites[index],
-    id: 'site'
+    id: 'randomSite'
   };
 
   respondJSON(request, response, 200, responseJSON);
 };
 
 const getUserPage = (request, response, sites, users) => {
-  
+  // Check to see if the username they are trying to use exists
+
+  // If not send back a response saying that the username isn't correct
+
+  // If it is then take them to their custom page, where they can add a site and hopefully see their favorite sites
 };
 
 const submitSite = (request, response, sites, users, params, siteName) => {
