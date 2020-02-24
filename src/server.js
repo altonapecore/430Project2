@@ -1,0 +1,70 @@
+const http = require('http');
+const url = require('url');
+const query = require('querystring');
+const htmlHandler = require('./htmlResponses.js');
+const jsonHandler = require('./jsonResponses.js');
+
+const port = process.env.PORT || process.env.NODE_PORT || 3000;
+
+const urlStruct = {
+  '/': htmlHandler.getIndex,
+  '/style.css': htmlHandler.getCSS,
+  '/getAllSites': jsonHandler.getAllSites,
+  '/getRandomSite': jsonHandler.getRandomSite,
+  '/getUserPage': jsonHandler.getUserPage,
+  '/submitSite': jsonHandler.submitSite,
+  notFound: jsonHandler.notFound
+};
+
+const sites = [
+  'http://tinytuba.com/',
+  'http://burymewithmymoney.com/',
+  'http://eelslap.com/',
+  'http://beesbeesbees.com/',
+  'http://www.staggeringbeauty.com/',
+  'https://chrismckenzie.com/',
+  'http://hasthelargehadroncolliderdestroyedtheworldyet.com/',
+  'http://corndog.io/',
+  'http://ihasabucket.com/',
+  'http://www.republiquedesmangues.fr/',
+  'http://www.rrrgggbbb.com/',
+  'http://imaninja.com/',
+  'http://www.movenowthinklater.com/',
+  'http://www.ismycomputeron.com/',
+  'https://happyhappyhardcore.com/',
+  'http://www.everydayim.com/',
+  'http://ninjaflex.com/',
+];
+
+const users = [
+  'alex',
+];
+
+const onRequest = (request, response) => {
+  // parse the url using the url module
+  // This will let us grab any section of the URL by name
+  const parsedUrl = url.parse(request.url);
+
+  // grab the query parameters (?key=value&key2=value2&etc=etc)
+  // and parse them into a reusable object by field name
+  // NOT USING yet - but we can test with ?name=Kirby
+  const params = query.parse(parsedUrl.query);
+
+  console.log(parsedUrl.pathname);
+  console.log(params);
+
+  // grab the 'accept' headers (comma delimited) and split them into an array
+  const acceptedTypes = request.headers.accept.split(',');
+
+  // check if the path name (the /name part of the url) matches
+  // any in our url object. If so call that function. If not, default to index.
+  if (urlStruct[parsedUrl.pathname]) {
+    urlStruct[parsedUrl.pathname](request, response, sites, users, params, siteName, acceptedTypes);
+  } else {
+    urlStruct.notFound(request, response, params, acceptedTypes);
+  }
+};
+
+http.createServer(onRequest).listen(port);
+
+console.log(`Listening on 127.0.0.1: ${port}`);

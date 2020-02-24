@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script type="text/babel">
+    const handleResponse = (xhr) => {
+			 //grab the content section
+      const content = document.querySelector("#content");
+
+      const type = xhr.getResponseHeader('content-type');
+
+        const obj = JSON.parse(xhr.response);
+      
+      //check the xhr status code and handle accordingly
+      switch(xhr.status) {
+        case 200: //success
+          content.innerHTML = `<b>Success</b> - Message: ${obj.message}`;
+          break;
+        case 400: //bad request 
+          content.innerHTML = `<b>Bad Request</b> - Message: ${obj.message}`;
+          break;
+        case 401: //unauthorized
+          content.innerHTML = `<b>Unauthorized</b> - Message: ${obj.message}`;
+          break;
+        case 403: //forbidden
+          content.innerHTML = `<b>Forbidden</b> - Message: ${obj.message}`;
+          break;
+        case 500: //internal server error
+          content.innerHTML = `<b>Internal Server Error</b> - Message ${obj.message}`;
+          break;
+        case 501: //not implemented
+          content.innerHTML = `Not Implemented. - Message: ${obj.message}`;
+          break;
+        default: //default other errors we are not handling in this example
+          content.innerHTML = `Resource Not Found. - Message: ${obj.message}`;
+          break;
+      }
+    };
+    
+    const sendAjax = (url, acceptedType) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.setRequestHeader ("Accept", acceptedType);
+
+      xhr.onload = () => handleResponse(xhr);
+      
+      xhr.send();
+    };
+
+    const init = () => {
+    };
+
+    window.onload = init;
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
