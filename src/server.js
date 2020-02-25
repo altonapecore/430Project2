@@ -11,7 +11,7 @@ const urlStruct = {
   '/style.css': htmlHandler.getCSS,
   '/getAllSites': jsonHandler.getAllSites,
   '/getRandomSite': jsonHandler.getRandomSite,
-  '/getTagPage': jsonHandler.getUserPage,
+  '/getTagPage': jsonHandler.getTagPage,
   '/submitSite': jsonHandler.submitSite,
   '/submitTag': jsonHandler.submitTag,
   notFound: jsonHandler.notFound

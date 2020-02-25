@@ -31,6 +31,18 @@ const getSite = () => {
   return site;
 };
 
+const findByTag = (tagName) => {
+  const foundSites = [];
+  const keys = Object.keys(sites);
+  for(let i = 0; i < sites.length; i++){
+    if(sites[i].value == tagName){
+      foundSites.push(keys[i]);
+    }
+  }
+
+  return foundSites;
+}
+
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json'});
   response.write(JSON.stringify(object));
@@ -63,6 +75,16 @@ const getTagPage = (request, response, params) => {
   // If not send back a response saying that the username isn't correct
 
   // If it is then take them to their custom page, where they can add a site and hopefully see their favorite sites
+  const obj = findByTag(params.tag);
+  console.log(obj);
+
+  const object = {
+    "id": "GetTagSites",
+    "message": "Sites have been grabbed!",
+    "sites": obj
+  }
+
+  respondJSON(request, response, 200, object);
 };
 
 const submitSite = (request, response, params) => {
@@ -76,17 +98,16 @@ const submitSite = (request, response, params) => {
 
   // If it is then add it to the list and send back a 200 response
 
-  const siteURL = params.siteURL;
+  const siteName = params.siteName;
   const tagName = "default tag";
   console.log(params);
-  //console.log(siteURL);
 
-  sites[siteURL] = tagName;
+  sites[siteName] = tagName;
 
   const object = {
     "id": "siteAdded",
     "message": "Site added!",
-    "url": siteURL,
+    "url": siteName,
     "tag": tagName
   }
 

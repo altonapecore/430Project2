@@ -9,7 +9,7 @@
     const displayContent = (obj, content) => {
       switch(obj.id){
         case "siteAdded":
-          content.innerHTML = obj;
+          content.innerHTML = `<p>Site <a href="${obj.url}">${obj.url}</a> has been added with a tag of: ${obj.tag}</p>`;
           break;
         case "siteNotAdded":
           content.innerHTML = obj;
@@ -53,13 +53,6 @@
           break;
       }
     };
-
-    const errorMessage = (message) => {
-      const content = document.querySelector("#content");
-
-      content.innerHTML = message;
-      content.style.color = "red";
-    }
     
     const sendAjax = (url) => {
       const xhr = new XMLHttpRequest();
@@ -79,21 +72,26 @@
       const action = form.getAttribute('action');
       const method = form.getAttribute('method');
 
-      // Define the form's two fields
+      // Define the form's two fields (third is for adding a tag)
       const siteName = form.querySelector('#siteName');
-      const tag = form.querySelector('#tag');;
+      const tag = document.querySelector('#tags');
+      let addTag;
+      if(action == "/submitTag"){
+        addTag = form.querySelector("#tag");
+      }
+      
 
       // Check to see if the tag part is undefined
       // Since tag is necessary for both actions we can check it outside of an if statement
-      if(tag.value == ""){
-        errorMessage('No tag defined');
+      if(action == "/submitTag" && addtag.value.length == 0){
+        alert("Please enter a tag name");
         return false;
       }
 
       // Since siteName is only needed with addSite we check it here
-      if(action == 'addSite'){
-        if(siteName.value == ""){
-          errorMessage('No siteName defined');
+      if(action == '/submitSite'){
+        if(siteName.value.length == 0){
+          alert("Please enter a site name");
           return false;
         }
       }
@@ -112,11 +110,11 @@
       // Build our form data
       let formData;
       // Here we need to do another if statement for the action to determine what the data will actually be
-      if(action == 'addTag'){
+      if(action == '/submitTag'){
         formData = `tag=${tag.value}`;
       }
       else{
-        formData = `tag=${tag.value}&siteName=${siteName.value}`;
+        formData = `?tag=${tag.value}&siteName=${siteName.value}`;
       }
 
       // Send request with data
@@ -140,7 +138,7 @@
       randomButton.addEventListener('click', randomSite);
       
       const tagButton = document.querySelector('#getTagSite');
-      const tags = document.querySelector('tags');
+      const tags = document.querySelector('#chooseTags');
       const selected = tags.options[tags.selectedIndex].value;
       const tagSite = () => sendAjax(`/getTagPage?tag=${selected}`);
       tagButton.addEventListener('click', tagSite);
@@ -153,28 +151,33 @@
   <h1>Click a button to cause a thing to happen</h1>
   <section>
     <button id="randomSite">Random Site</button>
-    <label for="tags">Choose a tag</label>
     <section>
-      <select id="tags">
-        <option value="funny"></option>
-        <option value="weird"></option>
-        <option value="science"></option>
-        <option value="computers"></option>
+      <label for="Tags">Choose a tag</label>
+      <select id="chooseTags">
+        <option value="funny" selected>funny</option>
+        <option value="weird">weird</option>
+        <option value="science">science</option>
+        <option value="computers">computers</option>
       </select>
       <button id="getTagSite">Get Tag's Sites</button>
     </section>
-    <form id="tagForm" action="/submitTag" method="post">
+    <form id="tagForm" action="/submitTag" method="POST">
       <label for="tag">Tag: </label>
       <input id="tag" type="text" name="tag"/>
       <input type="submit" value="Add Tag"/>
     </form>
-    <form id="siteForm" action="/submitSite" method="post">
+    <form id="siteForm" action="/submitSite" method="POST">
       <label for="siteName">siteName: </label>
       <input id="siteName" type="text" name="siteName"/>
-      <label for="tag">Tag: </label>
-      <input id="tag" type="text" name="tag"/>
+      <label for="tags">Choose a tag</label>
       <input type="submit" value="Add Site"/>
     </form>
+    <select id="tags" name="tags" form="siteForm">
+      <option value="funny" selected>funny</option>
+      <option value="weird">weird</option>
+      <option value="science">science</option>
+      <option value="computers">computers</option>
+    </select>
   </section>
   <div id="content"></div>
 </body>
