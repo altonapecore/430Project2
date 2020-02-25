@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "12.13.1",
+    "npm": "6.12.1"
+  },
   "scripts": {
     "pretest": "eslint ./src --fix",
     "test": "echo \"Tests done\"",

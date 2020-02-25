@@ -12,20 +12,25 @@
           content.innerHTML = `<p>Site <a href="${obj.url}">${obj.url}</a> has been added with a tag of: ${obj.tag}</p>`;
           break;
         case "siteNotAdded":
-          content.innerHTML = obj;
+          content.innerHTML = obj.message;
           break;
         case "tagAdded":
-          content.innerHTML = obj;
+          content.innerHTML = obj.message;
           break;
         case "tagNotAdded":
-          content.innerHTML = obj;
+          content.innerHTML = obj.message;
           break;
         case "randomSite":
           content.innerHTML = `<a href="${obj.message}">${obj.message}</a>`;
           break;
         case "viewTag":
-          content.innerHTML = obj;
-          break;
+          const sites = obj.sites;
+          let output;
+          for(let i = 0; i < sites.length; i++){
+            output += `<p><a href="${sites[i]}>${sites[i]}</a></p>`;
+          }
+          content.innerHTML = output;
+        break;
       }
     };
 
@@ -41,6 +46,9 @@
       switch(xhr.status) {
         case 200: //success
           displayContent(obj, content)
+          break;
+        case 400:
+          content.innerHTML = obj.message;
           break;
         case 500: //internal server error
           content.innerHTML = `<b>Internal Server Error</b>`;
@@ -83,7 +91,7 @@
 
       // Check to see if the tag part is undefined
       // Since tag is necessary for both actions we can check it outside of an if statement
-      if(action == "/submitTag" && addtag.value.length == 0){
+      if(action == "/submitTag" && addTag.value.length == 0){
         alert("Please enter a tag name");
         return false;
       }
@@ -111,10 +119,10 @@
       let formData;
       // Here we need to do another if statement for the action to determine what the data will actually be
       if(action == '/submitTag'){
-        formData = `tag=${tag.value}`;
+        formData = `tag=${addTag.value}`;
       }
       else{
-        formData = `?tag=${tag.value}&siteName=${siteName.value}`;
+        formData = `tag=${tag.value}&siteName=${siteName.value}`;
       }
 
       // Send request with data
@@ -139,7 +147,12 @@
       
       const tagButton = document.querySelector('#getTagSite');
       const tags = document.querySelector('#chooseTags');
-      const selected = tags.options[tags.selectedIndex].value;
+      let selected = tags.options[tags.selected].value;
+      tags.addEventListener('change', function(){
+        selected = tags.options[tags.selected].value;
+      });
+      
+      console.log(selected);
       const tagSite = () => sendAjax(`/getTagPage?tag=${selected}`);
       tagButton.addEventListener('click', tagSite);
     };
@@ -152,7 +165,7 @@
   <section>
     <button id="randomSite">Random Site</button>
     <section>
-      <label for="Tags">Choose a tag</label>
+      <label for="chooseTags">Choose a tag</label>
       <select id="chooseTags">
         <option value="funny" selected>funny</option>
         <option value="weird">weird</option>
@@ -167,17 +180,17 @@
       <input type="submit" value="Add Tag"/>
     </form>
     <form id="siteForm" action="/submitSite" method="POST">
-      <label for="siteName">siteName: </label>
+      <label for="siteName">Site Name: </label>
       <input id="siteName" type="text" name="siteName"/>
       <label for="tags">Choose a tag</label>
+      <select id="tags" name="tags" form="siteForm">
+        <option value="funny">funny</option>
+        <option value="weird">weird</option>
+        <option value="science">science</option>
+        <option value="computers">computers</option>
+      </select>
       <input type="submit" value="Add Site"/>
     </form>
-    <select id="tags" name="tags" form="siteForm">
-      <option value="funny" selected>funny</option>
-      <option value="weird">weird</option>
-      <option value="science">science</option>
-      <option value="computers">computers</option>
-    </select>
   </section>
   <div id="content"></div>
 </body>

@@ -34,11 +34,14 @@ const getSite = () => {
 const findByTag = (tagName) => {
   const foundSites = [];
   const keys = Object.keys(sites);
-  for(let i = 0; i < sites.length; i++){
-    if(sites[i].value == tagName){
+  const values = Object.values(sites);
+  for(let i = 0; i < keys.length; i++){
+    if(values[i] == tagName){
       foundSites.push(keys[i]);
     }
   }
+
+  console.log(foundSites);
 
   return foundSites;
 }
@@ -76,10 +79,9 @@ const getTagPage = (request, response, params) => {
 
   // If it is then take them to their custom page, where they can add a site and hopefully see their favorite sites
   const obj = findByTag(params.tag);
-  console.log(obj);
 
   const object = {
-    "id": "GetTagSites",
+    "id": "viewTag",
     "message": "Sites have been grabbed!",
     "sites": obj
   }
@@ -98,9 +100,16 @@ const submitSite = (request, response, params) => {
 
   // If it is then add it to the list and send back a 200 response
 
+  if(!params.tag || !params.siteName){
+    const object = {
+      "id": "badRequest",
+      "message": "Missing necessary parameters"
+    }
+
+    respondJSON(request, response, 400, object);
+  }
+  const tagName = params.tag;
   const siteName = params.siteName;
-  const tagName = "default tag";
-  console.log(params);
 
   sites[siteName] = tagName;
 
@@ -115,7 +124,34 @@ const submitSite = (request, response, params) => {
 };
 
 const submitTag = (request, response, params) => {
+  if(!params.tag){
+    const object = {
+      "id": "badRequest",
+      "message": "Missing necessary parameters"
+    }
 
+    respondJSON(request, response, 400, object);
+  }
+
+  const tagName = params.tag;
+
+  if(tags.includes(tagName)){
+    const object = {
+      "id": "tagNotAdded",
+      "message": `${tagName} is already added`
+    }
+
+    respondJSON(request, response, 200, object);
+  }
+  else{
+    tags.push(tagName);
+    const object = {
+      "id": "tagAdded",
+      "message": `${tagName} added successfully!`
+    }
+
+    respondJSON(request, response, 200, object);
+  }
 };
 
 const notFound = (request, response) => {
