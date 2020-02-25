@@ -6,51 +6,144 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const displayContent = (obj, content) => {
+      switch(obj.id){
+        case "siteAdded":
+          content.innerHTML = obj;
+          break;
+        case "siteNotAdded":
+          content.innerHTML = obj;
+          break;
+        case "tagAdded":
+          content.innerHTML = obj;
+          break;
+        case "tagNotAdded":
+          content.innerHTML = obj;
+          break;
+        case "randomSite":
+          content.innerHTML = `<a href="${obj.message}">${obj.message}</a>`;
+          break;
+        case "viewTag":
+          content.innerHTML = obj;
+          break;
+      }
+    };
+
     const handleResponse = (xhr) => {
 			 //grab the content section
       const content = document.querySelector("#content");
 
       const type = xhr.getResponseHeader('content-type');
 
-        const obj = JSON.parse(xhr.response);
+      const obj = JSON.parse(xhr.response);
       
       //check the xhr status code and handle accordingly
       switch(xhr.status) {
         case 200: //success
-          content.innerHTML = `<b>Success</b> - Message: ${obj.message}`;
-          break;
-        case 400: //bad request 
-          content.innerHTML = `<b>Bad Request</b> - Message: ${obj.message}`;
-          break;
-        case 401: //unauthorized
-          content.innerHTML = `<b>Unauthorized</b> - Message: ${obj.message}`;
-          break;
-        case 403: //forbidden
-          content.innerHTML = `<b>Forbidden</b> - Message: ${obj.message}`;
+          displayContent(obj, content)
           break;
         case 500: //internal server error
-          content.innerHTML = `<b>Internal Server Error</b> - Message ${obj.message}`;
+          content.innerHTML = `<b>Internal Server Error</b>`;
           break;
         case 501: //not implemented
-          content.innerHTML = `Not Implemented. - Message: ${obj.message}`;
+          content.innerHTML = `Not Implemented.`;
           break;
         default: //default other errors we are not handling in this example
           content.innerHTML = `Resource Not Found. - Message: ${obj.message}`;
           break;
       }
     };
+
+    const errorMessage = (message) => {
+      const content = document.querySelector("#content");
+
+      content.innerHTML = message;
+      content.style.color = "red";
+    }
     
-    const sendAjax = (url, acceptedType) => {
+    const sendAjax = (url) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', url);
-      xhr.setRequestHeader ("Accept", acceptedType);
+      xhr.setRequestHeader ("Accept", 'application/json');
 
       xhr.onload = () => handleResponse(xhr);
       
       xhr.send();
     };
 
+    const sendPost = (e, form) => {
+      e.preventDefault();
+
+      // Grab action and method
+      // Method doesn't really matter since it's mainly just POST but flexibility is nice
+      const action = form.getAttribute('action');
+      const method = form.getAttribute('method');
+
+      // Define the form's two fields
+      const siteName = form.querySelector('#siteName');
+      const tag = form.querySelector('#tag');;
+
+      // Check to see if the tag part is undefined
+      // Since tag is necessary for both actions we can check it outside of an if statement
+      if(tag == undefined){
+        errorMessage('No tag defined');
+        return false;
+      }
+
+      // Since siteName is only needed with addSite we check it here
+      if(action == 'addSite'){
+        if(siteName == undefined){
+          errorMessage('No siteName defined');
+          return false;
+        }
+      }
+
+      // Now that we checked for undefined values we can do the XHR stuff
+      const xhr = new XMLHttpRequest();
+      xhr.open(method, action);
+
+      // Set the request headers
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Accept', 'application/json');
+
+      // Set the onload handler
+      xhr.onload = () => handleResponse(xhr);
+
+      // Build our form data
+      let formData;
+      // Here we need to do another if statement for the action to determine what the data will actually be
+      if(action == 'addTag'){
+        formData = `tag=${tag.value}`;
+      }
+      else{
+        formData = `tag=${tag.value}&siteName=${siteName.value}`;
+      }
+
+      // Send request with data
+      xhr.send(formData);
+
+      // return false to prevent browser from changing the page
+      return false;
+    };
+
     const init = () => {
+      const tagForm = document.querySelector('#tagForm');
+      const addTag = (e) => sendPost(e, tagForm);
+      tagForm.addEventListener('submit', addTag);
+
+      const siteForm = document.querySelector('#siteForm');
+      const addSite = (e) => sendPost(e, siteForm);
+      siteForm.addEventListener('submit', addSite);
+
+      const randomButton = document.querySelector('#randomSite');
+      const randomSite = () => sendAjax("/getRandomSite");
+      randomButton.addEventListener('click', randomSite);
+      
+      const tagButton = document.querySelector('#getTagSite');
+      const tags = document.querySelector('tags');
+      const selected = tags.options[tags.selectedIndex].value;
+      const tagSite = () => sendAjax(`/getTagPage?tag=${selected}`);
+      tagButton.addEventListener('click', tagSite);
     };
 
     window.onload = init;
@@ -60,10 +153,29 @@
   <h1>Click a button to cause a thing to happen</h1>
   <section>
     <button id="randomSite">Random Site</button>
-    <button id="userPage">Access User Page</button>
-    <button id="allSites">Get All Sites</button>
-    <input id="newSite" placeholder="New Site Here">
-    <button id="addSite">Add New Site</button>
+    <label for="tags">Choose a tag</label>
+    <section>
+      <select id="tags">
+        <option value="funny"></option>
+        <option value="weird"></option>
+        <option value="science"></option>
+        <option value="computers"></option>
+      </select>
+      <button id="getTagSite">Get Tag's Sites</button>
+    </section>
+    <form id="tagForm" action="/addTag" method="post">
+      <label for="tag">Tag: </label>
+      <input id="tag" type="text" name="tag"/>
+      <input type="submit" value="Add Tag"/>
+    </form>
+    <form id="siteForm" action="/addSite" method="post">
+      <label for="siteName">siteName: </label>
+      <input id="siteName" type="text" name="siteName"/>
+      <label for="tag">Tag: </label>
+      <input id="tag" type="text" name="tag"/>
+      <input type="submit" value="Add Site"/>
+    </form>
   </section>
+  <div id="content"></div>
 </body>
 </html>

@@ -1,70 +1,63 @@
-const sites = [
-  'http://tinytuba.com/',
-  'http://burymewithmymoney.com/',
-  'http://eelslap.com/',
-  'http://beesbeesbees.com/',
-  'http://www.staggeringbeauty.com/',
-  'https://chrismckenzie.com/',
-  'http://hasthelargehadroncolliderdestroyedtheworldyet.com/',
-  'http://corndog.io/',
-  'http://ihasabucket.com/',
-  'http://www.republiquedesmangues.fr/',
-  'http://www.rrrgggbbb.com/',
-  'http://imaninja.com/',
-  'http://www.movenowthinklater.com/',
-  'http://www.ismycomputeron.com/',
-  'https://happyhappyhardcore.com/',
-  'http://www.everydayim.com/',
-  'http://ninjaflex.com/',
+const sites = {
+  'http://tinytuba.com/':'weird',
+  'http://burymewithmymoney.com/':'weird',
+  'http://eelslap.com/':'weird',
+  'http://beesbeesbees.com/':'funny',
+  'http://www.staggeringbeauty.com/':'weird',
+  'https://chrismckenzie.com/':'computers',
+  'http://hasthelargehadroncolliderdestroyedtheworldyet.com/':'science',
+  'http://corndog.io/':'weird',
+  'http://ihasabucket.com/':'funny',
+  'http://www.republiquedesmangues.fr/':'weird',
+  'http://www.rrrgggbbb.com/':'computers',
+  'http://imaninja.com/':'computers',
+  'http://www.movenowthinklater.com/':'computers',
+  'http://www.ismycomputeron.com/':'funny',
+  'https://happyhappyhardcore.com/':'weird',
+  'http://www.everydayim.com/':'funny',
+  'http://ninjaflex.com/':'weird',
+};
+
+const tags = [
+  'funny',
+  'weird',
+  'science',
+  'computers',
 ];
 
-const users = [
-  'alex',
-];
-
-const getRandomSite = () => {
+const getSite = () => {
   let keys = Object.keys(sites);
   let site = keys[Math.floor(Math.random() * keys.length)];
   return site;
 };
+
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json'});
   response.write(JSON.stringify(object));
   response.end();
 };
 
-// Helper function for the get random site to reduce the code there
-const randomRange = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-}
 
 const getAllSites = (request, response) => {
-  // Create an object literal version of all the sites
-  const jsonArray = Object.assign({}, sites);
-  
-  const responseJSON = {
-    message: jsonArray,
+  const object = {
+    message: sites,
     id: 'allSites'
   };
   
-  respondJSON(request, response, 200, responseJSON);
+  respondJSON(request, response, 200, object);
 };
 
 const getRandomSite = (request, response) => {
-  let index = randomRange(0, sites.length);
-
   // Create the response where the message is the site
-  const responseJSON = {
-    message: getRandomSite(),
+  const object = {
+    message: getSite(),
     id: 'randomSite'
   };
 
-  respondJSON(request, response, 200, responseJSON);
+  respondJSON(request, response, 200, object);
 };
 
-const getUserPage = (request, response, sites, users) => {
+const getTagPage = (request, response, params) => {
   // Check to see if the username they are trying to use exists
 
   // If not send back a response saying that the username isn't correct
@@ -91,26 +84,33 @@ const submitSite = (request, response, params) => {
   sites[siteURL] = userName;
 
   const object = {
-    "id": "",
+    "id": "siteAdded",
     "message": "Site added!",
     "url": siteURL
   }
+
+  respondJSON(request, response, 200, object);
+};
+
+const submitTag = (request, response, params) => {
+
 };
 
 const notFound = (request, response) => {
-  const responseJSON = {
+  const object = {
     message: 'The page you are looking for was not found.',
     id: 'notFound',
   };
   
    // return our json with a 404 not found error code
-  respondJSON(request, response, 404, responseJSON);
+  respondJSON(request, response, 404, object);
 };
 
 module.exports = {
   getAllSites,
   getRandomSite,
-  getUserPage,
+  getTagPage,
   submitSite,
+  submitTag,
   notFound
 };

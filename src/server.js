@@ -11,8 +11,9 @@ const urlStruct = {
   '/style.css': htmlHandler.getCSS,
   '/getAllSites': jsonHandler.getAllSites,
   '/getRandomSite': jsonHandler.getRandomSite,
-  '/getUserPage': jsonHandler.getUserPage,
+  '/getTagPage': jsonHandler.getUserPage,
   '/submitSite': jsonHandler.submitSite,
+  '/submitTag': jsonHandler.submitTag,
   notFound: jsonHandler.notFound
 };
 
@@ -39,7 +40,7 @@ const onRequest = (request, response) => {
   if (urlStruct[parsedUrl.pathname]) {
     urlStruct[parsedUrl.pathname](request, response, params);
   } else {
-    urlStruct.notFound(request, response, params, acceptedTypes);
+    urlStruct.notFound(request, response, params);
   }
 };
 
