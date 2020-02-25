@@ -41,8 +41,6 @@ const findByTag = (tagName) => {
     }
   }
 
-  console.log(foundSites);
-
   return foundSites;
 }
 
@@ -99,6 +97,7 @@ const submitSite = (request, response, params) => {
   // If it isn't then send back a response saying that the site isn't valid
 
   // If it is then add it to the list and send back a 200 response
+  console.log(params.tag);
 
   if(!params.tag || !params.siteName){
     const object = {
@@ -107,6 +106,7 @@ const submitSite = (request, response, params) => {
     }
 
     respondJSON(request, response, 400, object);
+    return;
   }
   const tagName = params.tag;
   const siteName = params.siteName;
@@ -131,6 +131,7 @@ const submitTag = (request, response, params) => {
     }
 
     respondJSON(request, response, 400, object);
+    return;
   }
 
   const tagName = params.tag;

@@ -30,7 +30,7 @@ const onRequest = (request, response) => {
   const params = query.parse(parsedUrl.query);
 
   console.log(parsedUrl.pathname);
-  console.log(params);
+  console.log("params.tag: ",params.tag);
 
   // grab the 'accept' headers (comma delimited) and split them into an array
   const acceptedTypes = request.headers.accept.split(',');

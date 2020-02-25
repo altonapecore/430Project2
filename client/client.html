@@ -25,9 +25,10 @@
           break;
         case "viewTag":
           const sites = obj.sites;
-          let output;
+          let output ="";
           for(let i = 0; i < sites.length; i++){
-            output += `<p><a href="${sites[i]}>${sites[i]}</a></p>`;
+            //console.log(sites[i]);
+            output += `<p><a href="${sites[i]}">${sites[i]}</a></p>`;
           }
           content.innerHTML = output;
         break;
@@ -48,6 +49,7 @@
           displayContent(obj, content)
           break;
         case 400:
+          content.style.color = "red";
           content.innerHTML = obj.message;
           break;
         case 500: //internal server error
@@ -125,6 +127,8 @@
         formData = `tag=${tag.value}&siteName=${siteName.value}`;
       }
 
+      
+
       // Send request with data
       xhr.send(formData);
 
@@ -147,12 +151,7 @@
       
       const tagButton = document.querySelector('#getTagSite');
       const tags = document.querySelector('#chooseTags');
-      let selected = tags.options[tags.selected].value;
-      tags.addEventListener('change', function(){
-        selected = tags.options[tags.selected].value;
-      });
-      
-      console.log(selected);
+      const selected = tags.options[tags.selectedIndex].value;
       const tagSite = () => sendAjax(`/getTagPage?tag=${selected}`);
       tagButton.addEventListener('click', tagSite);
     };
