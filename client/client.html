@@ -85,14 +85,14 @@
 
       // Check to see if the tag part is undefined
       // Since tag is necessary for both actions we can check it outside of an if statement
-      if(tag == undefined){
+      if(tag.value == ""){
         errorMessage('No tag defined');
         return false;
       }
 
       // Since siteName is only needed with addSite we check it here
       if(action == 'addSite'){
-        if(siteName == undefined){
+        if(siteName.value == ""){
           errorMessage('No siteName defined');
           return false;
         }
@@ -163,12 +163,12 @@
       </select>
       <button id="getTagSite">Get Tag's Sites</button>
     </section>
-    <form id="tagForm" action="/addTag" method="post">
+    <form id="tagForm" action="/submitTag" method="post">
       <label for="tag">Tag: </label>
       <input id="tag" type="text" name="tag"/>
       <input type="submit" value="Add Tag"/>
     </form>
-    <form id="siteForm" action="/addSite" method="post">
+    <form id="siteForm" action="/submitSite" method="post">
       <label for="siteName">siteName: </label>
       <input id="siteName" type="text" name="siteName"/>
       <label for="tag">Tag: </label>

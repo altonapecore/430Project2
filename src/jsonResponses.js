@@ -77,16 +77,17 @@ const submitSite = (request, response, params) => {
   // If it is then add it to the list and send back a 200 response
 
   const siteURL = params.siteURL;
-  const userName = "default user";
+  const tagName = "default tag";
   console.log(params);
-  console.log(siteURL);
+  //console.log(siteURL);
 
-  sites[siteURL] = userName;
+  sites[siteURL] = tagName;
 
   const object = {
     "id": "siteAdded",
     "message": "Site added!",
-    "url": siteURL
+    "url": siteURL,
+    "tag": tagName
   }
 
   respondJSON(request, response, 200, object);
