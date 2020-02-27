@@ -14,9 +14,6 @@
         case "siteNotAdded":
           content.innerHTML = obj.message;
           break;
-        case "tagAdded":
-          content.innerHTML = obj.message;
-          break;
         case "tagNotAdded":
           content.innerHTML = obj.message;
           break;
@@ -26,6 +23,10 @@
         case "viewTag":
           const sites = obj.sites;
           let output ="";
+          if(output.length == 0){
+             output += "<p>No sites with this tag</p>";
+             console.log("yes");
+          }
           for(let i = 0; i < sites.length; i++){
             //console.log(sites[i]);
             output += `<p><a href="${sites[i]}">${sites[i]}</a></p>`;
@@ -47,6 +48,23 @@
       switch(xhr.status) {
         case 200: //success
           displayContent(obj, content)
+          break;
+        case 201:
+          const chooseTags = document.querySelector("#chooseTags")
+          const tags = document.querySelector("#tags");
+
+          const newTag = obj.tag;
+
+          const option = document.createElement('option');
+          option.appendChild(document.createTextNode(newTag));
+          option.value = newTag;
+
+          const optionTwo = option.cloneNode(true);
+
+          tags.appendChild(option);
+          chooseTags.appendChild(optionTwo);
+          
+          displayContent(obj, content);
           break;
         case 400:
           content.style.color = "red";
@@ -136,6 +154,10 @@
       return false;
     };
 
+    const updateSelected = (tags) => {
+      return tags.options[tags.selectedIndex].value;
+    }
+
     const init = () => {
       const tagForm = document.querySelector('#tagForm');
       const addTag = (e) => sendPost(e, tagForm);
@@ -151,7 +173,12 @@
       
       const tagButton = document.querySelector('#getTagSite');
       const tags = document.querySelector('#chooseTags');
-      const selected = tags.options[tags.selectedIndex].value;
+      let selected = tags.options[tags.selectedIndex].value;
+
+      const changeSelected = () => {
+        selected = updateSelected(tags);
+      }
+      tags.addEventListener('change', changeSelected);
       const tagSite = () => sendAjax(`/getTagPage?tag=${selected}`);
       tagButton.addEventListener('click', tagSite);
     };

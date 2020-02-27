@@ -148,10 +148,11 @@ const submitTag = (request, response, params) => {
     tags.push(tagName);
     const object = {
       "id": "tagAdded",
-      "message": `${tagName} added successfully!`
+      "message": `${tagName} added successfully!`,
+      "tag": tagName
     }
 
-    respondJSON(request, response, 200, object);
+    respondJSON(request, response, 201, object);
   }
 };
 
