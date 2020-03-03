@@ -1,3 +1,32 @@
-#chooseTags, #tags{
-    width: 100px;
+html{
+    background-color:#203b51;
+    color:#daebfa;
+}
+
+body{
+    background: #203b51;
+    color: #daebfa;
+    font-family: 'Varela Round', sans-serif;
+}
+
+h1{
+    text-align: center;
+    margin: 1em;
+}
+
+#randSiteSection, #getTagSection, #addTagSection, #addSiteSection, #content, #page{
+    margin: 2em;
+    text-align: center;
+}
+
+.card{
+    margin: 0 auto;
+    float: none; 
+    margin-bottom: 10px; 
+    background-color: #daebfa;
+}
+
+a:hover{
+    background-color: #26C485;
+    opacity: 0.7;
 }

@@ -8,13 +8,15 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
   '/': htmlHandler.getIndex,
+  '/client.html': htmlHandler.getIndex,
   '/style.css': htmlHandler.getCSS,
   '/getAllSites': jsonHandler.getAllSites,
   '/getRandomSite': jsonHandler.getRandomSite,
   '/getTagPage': jsonHandler.getTagPage,
   '/submitSite': jsonHandler.submitSite,
   '/submitTag': jsonHandler.submitTag,
-  notFound: jsonHandler.notFound
+  '/getAllTags': jsonHandler.getAllTags,
+  notFound: htmlHandler.notFound,
 };
 
 const handlePost = (request, response, parsedUrl) => {
@@ -22,6 +24,7 @@ const handlePost = (request, response, parsedUrl) => {
 
   const body = [];
 
+  // If there's an error handle it
   request.on('error', (err) => {
     console.dir(err);
     res.statusCode = 400;
@@ -37,10 +40,9 @@ const handlePost = (request, response, parsedUrl) => {
 
     const bodyParams = query.parse(bodyString);
 
-    if(parsedUrl.pathname === '/submitTag'){
+    if (parsedUrl.pathname === '/submitTag') {
       jsonHandler.submitTag(request, response, bodyParams);
-    }
-    else{
+    } else {
       jsonHandler.submitSite(request, response, bodyParams);
     }
   });
@@ -51,21 +53,13 @@ const onRequest = (request, response) => {
   // This will let us grab any section of the URL by name
   const parsedUrl = url.parse(request.url);
 
-  if(request.method === 'POST'){
+  if (request.method === 'POST') {
     handlePost(request, response, parsedUrl);
-  }
-
-  else{
+  } else {
     // grab the query parameters (?key=value&key2=value2&etc=etc)
     // and parse them into a reusable object by field name
     // NOT USING yet - but we can test with ?name=Kirby
     const params = query.parse(parsedUrl.query);
-
-    console.log(parsedUrl.pathname);
-    console.log("params.tag: ",params.tag);
-
-    // grab the 'accept' headers (comma delimited) and split them into an array
-    const acceptedTypes = request.headers.accept.split(',');
 
     // check if the path name (the /name part of the url) matches
     // any in our url object. If so call that function. If not, default to index.
