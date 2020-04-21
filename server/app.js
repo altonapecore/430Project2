@@ -16,9 +16,9 @@ const csrf = require('csurf');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/RandomSiteGenerator';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/RandomSite';
 
-// Setup mongoose option to use newer functionality
+// Setup mongoose options to use newer functionality
 const mongooseOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -74,6 +74,7 @@ app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 app.disable('x-powered-by');
 app.use(cookieParser());
+console.log("is this on");
 
 app.use(csrf());
 app.use((err, req, res, next) => {

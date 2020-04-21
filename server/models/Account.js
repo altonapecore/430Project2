@@ -16,7 +16,7 @@ const AccountSchema = new mongoose.Schema({
     unique: true,
     match: /^[A-Za-z0-9_\-.]{1,16}$/,
   },
-  sale: {
+  salt: {
     type: Buffer,
     required: true,
   },
@@ -31,6 +31,7 @@ const AccountSchema = new mongoose.Schema({
 });
 
 AccountSchema.statics.toAPI = (doc) => ({
+  // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
 });
