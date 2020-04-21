@@ -5,7 +5,7 @@ const router = (app) => {
   console.log(mid.requiresLogout);
   console.log(mid.requiresLogin);
   console.log(mid.requiresLogout);
-  
+
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/getSite', mid.requiresSecure, controllers.Site.getSite);
   app.get('/getAllSites', mid.requiresSecure, controllers.Site.getSite);
