@@ -5,6 +5,7 @@ const _ = require('underscore');
 
 let SiteModel = {};
 
+const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
 const SiteSchema = new mongoose.Schema({
@@ -36,13 +37,21 @@ SiteSchema.statics.toAPI = (doc) => ({
 
 SiteSchema.statics.findByTag = (tag, callback) => {
   const search = {
-    owner: tag,
+    tag,
   };
 
   return SiteModel.find(search).select('siteName').lean().exec(callback);
 };
 
 SiteSchema.statics.findAll = (callback) => SiteModel.find().select('name').lean().exec(callback);
+
+SiteSchema.statics.findByUser = (creatorId, callback) => {
+  const search = {
+    creator: convertId(creatorId),
+  };
+
+  return SiteModel.find(search).select('siteName tag').lean().exec(callback);
+};
 
 SiteModel = mongoose.model('Site', SiteSchema);
 

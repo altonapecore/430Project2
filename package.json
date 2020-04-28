@@ -12,8 +12,8 @@
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\"",
-    "buildLoginBundle": "babel ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
-    "buildAppBundle": "babel ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
+    "buildLoginBundle": "webpack --config loginWebpack.config.js",
+    "buildAppBundle": "webpack --config webpack.config.js",
     "build": "npm run buildLoginBundle && npm run buildAppBundle",
     "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "watchAppBundle": "babel --watch ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js"
@@ -28,15 +28,21 @@
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.1",
-    "nodemon": "^2.0.2"
+    "html-webpack-plugin": "^4.2.0",
+    "nodemon": "^2.0.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect-redis": "^4.0.4",
@@ -47,6 +53,8 @@
     "express-session": "^1.17.0",
     "helmet": "^3.21.3",
     "mongoose": "^5.9.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "redis": "^3.0.2",
     "serve-favicon": "^2.5.0",
     "underscore": "^1.9.2"

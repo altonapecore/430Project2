@@ -3,7 +3,7 @@ const models = require('../models');
 const { Site } = models;
 
 const makeSite = (req, res) => {
-  if (!req.body.name) {
+  if (!req.body.siteName) {
     return res.status(400).json({ error: 'Site name is required' });
   }
 
@@ -43,7 +43,7 @@ const makerPage = (req, res) => {
 };
 
 // Gets all sites for not
-const getSite = (req, res) => Site.SiteModel.findAll((err, docs) => {
+const getAllSites = (req, res) => Site.SiteModel.findAll((err, docs) => {
   if (err) {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred' });
@@ -52,6 +52,18 @@ const getSite = (req, res) => Site.SiteModel.findAll((err, docs) => {
   return res.json({ sites: docs });
 });
 
+// Gets all the sites that a user has added
+const getUserSites = (req, res) => Site.SiteModel.findByUser(req.session.account._id,
+  (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ sites: docs });
+  });
+
 module.exports.makerPage = makerPage;
-module.exports.getSite = getSite;
-module.exports.make = makeSite;
+module.exports.getAllSites = getAllSites;
+module.exports.getUserSites = getUserSites;
+module.exports.makeSite = makeSite;

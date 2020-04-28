@@ -7,14 +7,15 @@ const router = (app) => {
   console.log(mid.requiresLogout);
 
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
-  app.get('/getSite', mid.requiresSecure, controllers.Site.getSite);
-  app.get('/getAllSites', mid.requiresSecure, controllers.Site.getSite);
+  // app.get('/getSite', mid.requiresSecure, controllers.Site.getSite);
+  app.get('/getUserSites', mid.requiresLogin, controllers.Site.getUserSites);
+  app.get('/getAllSites', mid.requiresSecure, controllers.Site.getAllSites);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/maker', mid.requiresLogin, controllers.Site.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Site.make);
+  app.post('/maker', mid.requiresLogin, controllers.Site.makeSite);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
