@@ -253,6 +253,9 @@ $(document).ready(function() {
 const handleError = (message) => {
     $("#errorMessage").text(message);
     $("#myModal").css("display", "block");
+    $(".modal-content").css("background-color", "#CC0000");
+    $(".close").css("color", "#aaa");
+    $(".modal-content").css("color", "#aaa");
 };
 
 const redirect = (response) => {
