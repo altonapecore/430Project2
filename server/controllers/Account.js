@@ -11,13 +11,17 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+const changePassPage = (req, res) => {
+  res.render('changePass', { csrfToken: req.csrfToken() });
+};
+
 const login = (req, res) => {
   // Force cast to strings to cover some security flaws
   const username = `${req.body.username}`;
   const password = `${req.body.pass}`;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'RAWR! All fields are required' });
+    return res.status(400).json({ error: 'All fields are required' });
   }
 
   return Account.AccountModel.authenticate(username, password, (err, account) => {
@@ -73,6 +77,30 @@ const signup = (req, res) => {
   });
 };
 
+const changePass = (req, res) => {
+  // Cast to strings to cover up some security flaws
+  req.body.pass = `${req.body.pass}`;
+  req.body.newPass = `${req.body.newPass}`;
+
+  if(!req.body.pass || !req.body.newPass){
+    return res.status(400).json({error: 'All fields are required'});
+  }
+
+  // Check to see if the old pass and new pass are the same
+  // If so shame them
+  if(req.body.pass === req.body.newPass){
+    return res.status(400).json({error: 'New password cannot be the same as the old one'});
+  }
+
+  return Account.AccountModel.updatePassword(req.session.account.username, req.body.pass, req.body.newPass, (err, account) => {
+    if(err || !account) {
+      return res.status(401).json({ error: 'Password is incorrect' });
+    }
+
+    return res.json({ message: 'Password updated successfully'});
+  })
+}
+
 const getToken = (req, res) => {
   const csrfJSON = {
     csrfToken: req.csrfToken(),
@@ -85,4 +113,6 @@ module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.changePass = changePass;
+module.exports.changePassPage = changePassPage;
 module.exports.getToken = getToken;

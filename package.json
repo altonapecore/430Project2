@@ -15,8 +15,8 @@
     "buildLoginBundle": "webpack --config loginWebpack.config.js",
     "buildAppBundle": "webpack --config webpack.config.js",
     "build": "npm run buildLoginBundle && npm run buildAppBundle",
-    "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
-    "watchAppBundle": "babel --watch ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js"
+    "watchLoginBundle": "babel --watch ./client/login --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
+    "watchAppBundle": "babel --watch ./client/app --presets @babel/preset-react --out-file ./hosted/bundle.js"
   },
   "keywords": [
     "Node",
@@ -34,6 +34,7 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "html-webpack-plugin": "^4.2.0",
     "nodemon": "^2.0.2",
     "webpack": "^4.43.0",

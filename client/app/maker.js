@@ -1,25 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles({
-    root: {
-        textAlign: "center",
-    },
-    tag: {
-
-    },
-});
-
 const handleSubmission = (e) => {
     e.preventDefault();
-
-    $("#error").animate({width:'hide'},350);
 
     if($("#siteName").val() == ''){
         handleError("A site URL is required");
@@ -32,11 +20,31 @@ const handleSubmission = (e) => {
     }
 
     sendAjax('POST', $("#siteForm").attr("action"), $("#siteForm").serialize(), function() {
+        handleSuccess("Site added successfully");
         siteSuccess($("#siteName"));
     });
 
     return false;
 };
+
+const handleTag = (e) => {
+    e.preventDefault();
+
+    sendAjax('GET', $("#tagForm").attr("action"), $("#tagForm").serialize(), (data) => {
+        ReactDOM.render(
+            <SiteList sites={data.sites} />, document.querySelector("#sites")
+        );
+    });
+};
+
+const handlePass = (e) => {
+    e.preventDefault();
+
+    sendAjax('POST', $("#passForm").attr("action"), $("#passForm").serialize(), function() {
+        handleSuccess("Password successfully changed");
+        siteSuccess($("#siteName"));
+    })
+}
 
 const SiteForm = (props) => {
     return(
@@ -63,6 +71,48 @@ const SiteForm = (props) => {
     );
 };
 
+const PassWindow = (props) => {
+    return(
+        <form 
+            id="passForm" name="passForm"
+            onSubmit={handlePass}
+            action="/changePass"
+            method="POST"
+            className="mainForm"
+        >
+            <label htmlFor="pass">Old Password: </label>
+            <input id="pass" type="password" name="pass" placeholder="Old Password"/>
+            <label htmlFor="newPass">New Password: </label>
+            <input id="newPass" type="password" name="newPass" placeholder="New Password"/>
+            <input type="hidden" name="_csrf" value={props.csrf}/>
+            <input className="formSubmit" type="submit" value="Change"/>
+        </form>
+    )
+}
+
+const TagWindow = (props) => {
+    return(
+        <form
+            id="tagForm"
+            name="tagForm"
+            onSubmit={handleTag}
+            action="/getByTag"
+            method="GET"
+            className="mainForm"
+        >
+            <label htmlFor="tag">Tag</label>
+            <select className="rounded" id="tag" name="tag" form="tagForm">
+                <option value="funny">funny</option>
+                <option value="weird">weird</option>
+                <option value="science">science</option>
+                <option value="computers">computers</option>
+            </select>
+            <input type="hidden" name="_csrf" value={props.csrf}/>
+            <input className="formSubmit" type="submit" value="Get Tag's Sites"/>
+        </form>
+    )
+};
+
 const SiteList = function(props){
     if(props.sites.length === 0){
         return(
@@ -73,14 +123,13 @@ const SiteList = function(props){
     }
 
     const siteNodes = props.sites.map(function(site){
-        const classes = useStyles();
         return(
-            <Card className={classes.root}>
+            <Card className="Card" variant="outlined">
                 <CardContent>
                     <CardActions>
-                        <Button href={site.siteName} color="primary">{site.siteName}</Button>
+                        <Button style={{display: "table-cell"}} className="CardText" href={site.siteName} target="_blank">{site.siteName}</Button>
                     </CardActions>
-                    <Typography className={classes.tag} color="textPrimary">
+                    <Typography className="CardTag" color="textPrimary">
                         Tag: {site.tag}
                     </Typography>
                 </CardContent>
@@ -95,6 +144,21 @@ const SiteList = function(props){
     );
 };
 
+const getRandomSite = () => {
+    sendAjax('GET', '/getSite', null, (data) => {
+        ReactDOM.render(
+            <SiteList sites={data.sites} />, document.querySelector("#sites")
+        );
+    });
+};
+
+const createTagWindow = (csrf) => {
+    ReactDOM.render(
+        <TagWindow csrf={csrf} />,
+        document.querySelector("#sites")
+    );
+};
+
 const siteSuccess = () => {
     sendAjax('GET', '/getUserSites', null, (data) => {
         ReactDOM.render(
@@ -103,7 +167,51 @@ const siteSuccess = () => {
     });
 };
 
+const getSites = () => {
+    sendAjax('GET', '/getAllSites', null, (data) => {
+        ReactDOM.render(
+            <SiteList sites={data.sites} />, document.querySelector("#sites")
+        );
+    });
+};
+
+const createPassWindow = (csrf) => {
+    ReactDOM.render(
+        <PassWindow csrf={csrf} />,
+        document.querySelector("#sites")
+    );
+};
+
 const setup = function(csrf){
+    const changePassButton = document.querySelector("#changePassButton");
+    const randomSiteButton = document.querySelector("#randomSiteButton");
+    const allSitesButton = document.querySelector("#allSitesButton");
+    const findByTagButton = document.querySelector("#findByTagButton");
+
+    changePassButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createPassWindow(csrf);
+        return false;
+    });
+
+    randomSiteButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        getRandomSite();
+        return false;
+    });
+
+    allSitesButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        getSites();
+        return false;
+    });
+
+    findByTagButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createTagWindow(csrf);
+        return false;
+    });
+
     ReactDOM.render(
         <SiteForm csrf={csrf} />, document.querySelector("#makeSite")
     );
@@ -127,12 +235,16 @@ $(document).ready(function() {
 
 const handleError = (message) => {
     $("#errorMessage").text(message);
-    $("#error").animate({width:'toggle'},350);
+    $("#myModal").css("display", "block");
 };
 
-const redirect = (response) => {
-    window.location = response.redirect;
-};
+const handleSuccess = (message) => {
+    $("#errorMessage").text(message);
+    $("#myModal").css("display", "block");
+    $(".modal-content").css("background-color", "#00C851");
+    $(".close").css("color", "#2E2E2E");
+    $(".modal-content").css("color", "#2E2E2E");
+}
 
 const sendAjax = (type, action, data, success) => {
     $.ajax({

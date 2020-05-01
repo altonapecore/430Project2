@@ -31,8 +31,13 @@ const makeSite = (req, res) => {
   return sitePromise;
 };
 
+const getTagForm = (req, res) => {
+  res.render('getByTag', { csrfToken: req.csrfToken() });
+};
+
 const makerPage = (req, res) => {
-  Site.SiteModel.findAll((err, docs) => {
+  Site.SiteModel.findByUser(req.session.account._id,
+    (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -61,9 +66,31 @@ const getUserSites = (req, res) => Site.SiteModel.findByUser(req.session.account
     }
 
     return res.json({ sites: docs });
-  });
+});
+
+const getByTag = (req, res) => Site.SiteModel.findByTag(req.body.tag, 
+  (err, docs) => {
+    if(err){
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ sites: docs });
+});
+
+const getRandomSite = (req, res) => Site.SiteModel.getSite((err, docs) => {
+  if(err){
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+
+  return res.json({ sites: docs });
+});
 
 module.exports.makerPage = makerPage;
 module.exports.getAllSites = getAllSites;
 module.exports.getUserSites = getUserSites;
 module.exports.makeSite = makeSite;
+module.exports.getTagForm = getTagForm;
+module.exports.getByTag = getByTag;
+module.exports.getSite = getRandomSite;

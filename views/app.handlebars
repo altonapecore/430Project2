@@ -15,16 +15,67 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"></a>
-    <div class="navlink"><a href="/logout">Log out</a></div>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" id="logoutButton" href="/logout">Log Out</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="changePassButton" href="/changePass">Change Password</a>
+            </li>
+        </ul>
+    </div>
+    <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="#">Random Website Generator</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" id="randomSiteButton" href="/getSite">Get a Random Site</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="allSitesButton" href="/getAllSites">Get All Sites</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="findByTagButton" href="/getByTag">Get a Site By Its Tag</a>
+            </li>
+        </ul>
+    </div>
   </nav>
   <section id="makeSite">
   </section>
-  <section id="sites">
-  </section>
-  <div id="error"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
+  <div class="row">
+    <div class="col-2" id="leftAd"><img src="/assets/img/beans.jpg" alt="beans"></div>
+  
+    <div class="col-8" id="sites"></div>
+  
+    <div class="col-2" id="rightAd"><img src="/assets/img/beans.jpg" alt="beans"></div>
   </div>
-  <script src="/assets/bundle.js"></script>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="errorMessage">Wrong username or password</p>
+    </div>
+  </div>
+  <script>
+    // Javascript for handling the modal popup
+    let modal = document.querySelector("#myModal");
+
+    let span = document.querySelector(".close");
+
+    span.onclick = function(){
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event){
+      if(event.target == modal){
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>

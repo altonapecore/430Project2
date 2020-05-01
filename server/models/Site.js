@@ -37,13 +37,13 @@ SiteSchema.statics.toAPI = (doc) => ({
 
 SiteSchema.statics.findByTag = (tag, callback) => {
   const search = {
-    tag,
+    tag: tag,
   };
 
-  return SiteModel.find(search).select('siteName').lean().exec(callback);
+  return SiteModel.find(search).select('siteName tag').lean().exec(callback);
 };
 
-SiteSchema.statics.findAll = (callback) => SiteModel.find().select('name').lean().exec(callback);
+SiteSchema.statics.findAll = (callback) => SiteModel.find().select('siteName tag').lean().exec(callback);
 
 SiteSchema.statics.findByUser = (creatorId, callback) => {
   const search = {
@@ -52,6 +52,28 @@ SiteSchema.statics.findByUser = (creatorId, callback) => {
 
   return SiteModel.find(search).select('siteName tag').lean().exec(callback);
 };
+
+SiteSchema.statics.getSite = (callback) => {
+  SiteModel.findAll((err, doc) => {
+    if(err){
+      return callback(err);
+    }
+
+    if(!doc){
+      return callback();
+    }
+
+    let array = Object.values(doc);
+
+    let count = array.length;
+
+    let randomNumber = Math.floor(Math.random() * Math.floor(count));
+
+    let site = array.slice(randomNumber + 1, randomNumber + 2);
+
+    return callback(null, site);
+  })
+}
 
 SiteModel = mongoose.model('Site', SiteSchema);
 

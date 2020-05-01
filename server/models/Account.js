@@ -47,6 +47,43 @@ const validatePassword = (doc, password, callback) => {
   });
 };
 
+AccountSchema.statics.updatePassword = (username, password, newPass, callback) => {
+  // This will check to see if there is an account and then use that account to validate the password
+  AccountModel.authenticate(username, password, (err, doc) => {
+    console.log(doc);
+    if(err) {
+      return callback(err);
+    }
+
+    if(!doc){
+      return callback();
+    }
+
+    // Generate new hash for the account and then update the info
+    return AccountModel.generateHash(newPass, (salt, hash) => {
+      // Create a query for findOneAndUpdate
+      let query = {
+        'username': doc.username
+      };
+      // Update the doc account so that we can pass it in
+      doc.salt = salt;
+      doc.password = hash;
+
+      AccountModel.findOneAndUpdate(query, doc, function(err, doc) {
+        if(err){
+          return callback(err);
+        }
+
+        if(!doc){
+          return callback();
+        }
+
+        return callback(null, doc);
+      });
+    });
+  });
+};
+
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,

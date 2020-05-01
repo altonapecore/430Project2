@@ -4,6 +4,9 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: #203b51;
+    color: #daebfa;
 }
 
 #logo {
@@ -14,46 +17,39 @@ html, body {
     border-radius: 8px;
 }
 
-nav {
-    width: 100%;
-    height: 50px;
-    background-color: #55acee;
+.nav-link{
+    font-size: 1.25em !important;
+    border: 2px solid #daebfa;
+    border-radius: 20px;
+    color: #daebfa;
+    background-color: #203b51;
 }
 
-nav:nth-child(1) {
-    padding-left: 25px;
-}
-
-.navlink {
-    padding: 5px;
-    padding-top: 12px;
-    padding-left: 20px;
-    color: white;
-    font-size: 1.3em;
-    float: left;
-}
-
-.navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-    color: white;
-    text-decoration: none;
-    padding: 5px;
-    border-radius: 4px;
-    background-color: #55acee;
+.nav-link:hover {
     transition: background-color 0.4s ease;
+    background-color: #2e628a;
 }
 
-.navlink a:hover {
-    transition: background-color 0.8s ease;
-    background-color: #66bdff;
+#loginButton{
+    margin-right: 1em;
+}
+
+#allSitesButton, #findByTagButton{
+    margin-left: 1em;
+}
+
+#makeSite{
+    margin: 1em;
 }
 
 .siteForm {
-    border: 2px solid #338acc;
-    height: 80px;
-    width: 600;
-    margin-top:0px;
+    border: 2px solid #daebfa;
+    border-radius: 10px;
+    height: 70px;
+    width: 600px;
+    margin-top:0.5em;
     padding-top:10px;
-    background-color: #55acee;
+    background-color: #2e628a;
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -76,9 +72,9 @@ nav:nth-child(1) {
     display: inline;
     margin-left: 2em;
     width: 100px;
-    background-color: #55acee;
+    background-color: #203b51;
     border-radius: 20px;
-    color: rgb(85, 89, 112);
+    color: #daebfa;
     text-decoration: none;
 }
 
@@ -88,14 +84,14 @@ nav:nth-child(1) {
 
 .makeSiteSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #2e628a;
 }
 
 .mainForm {
     height: 300px;
-    width: 350px;
+    width: 400px;
     margin: 0 auto;
-    padding-top: 350px;
+    padding-top: 2em;
     font-size: 1.2em;
 }
 
@@ -105,7 +101,7 @@ nav:nth-child(1) {
 
 .mainForm label {
     display: inline-block;
-    width: 100px;
+    width: 200px;
     margin-right: 10px;
     text-align: right;
     font-size: 1.2em;
@@ -119,28 +115,31 @@ nav:nth-child(1) {
     margin-top: 14px;
     font-size: 1.2em;
     width: 100px;
-    background-color: #55acee;
-    border-radius: 2px;
-    border-color: #66acee;
+    background-color: #2e628a;
+    border-radius: 6px;
+    border-color: #daebfa;
     padding: 3px 0px;
-    color: white;
+    color: #daebfa;
     text-decoration: none;
+    overflow-x: hidden;
 }
 
 .formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
+    color: #daebfa;
 }
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #2873ac;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #newPass {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
     border-radius: 6px;
+    background-color: #2e628a;
+    color: #daebfa;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
@@ -148,116 +147,156 @@ nav:nth-child(1) {
     box-shadow: 0px 0px 1px 1px #55acee;
 }
 
-#error {
-    display:none;
-    top: 250px;
-    width: 250px;
-    height: 650px;
-    position: absolute;
-    z-index: 200;
-    right: 0px;
-    overflow: hidden;
-}
-
-#error h3 {
-    width: 200px;
-    position: absolute;
-    top: 0px;
-    left: 20px;
-}
-
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
-}
-
-#errorMessage {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: red;
-    font-style: italic;
-}
-
-#domo {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
-}
-
 #sites {
-    width: 40%;
     min-width: 400px;
-    border: 2px solid #55acee;
+    max-width: 800px;
     border-radius: 4px;
     margin: 0 auto;
-    margin-top: 100px;
 }
 
-.domo {
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    background-color: #55acee;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
-}
-
-.domo:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
-}
-
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
-}
-
-h3.emptyDomo {
-    width: 400px;
-    font-size: 1.5em;
-    margin: 0 auto;
+.Card{
+    margin-bottom: 1em;
     text-align: center;
-    margin-top: 18px;
+    background-color: #2e628a;
+    color: #daebfa;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #daebfa;
 }
 
-h3.domoName {
-    float:left;
-    width: 200px;
+.CardText{
+    background-color: #203b51;
+    color: #daebfa;
+    border: 1px solid #daebfa;
+}
+
+.CardText:hover{
+    transition: background-color 0.8s ease;
+    background-color: #2e628a;
+    color: #daebfa;
+}
+
+.CardTag{
+    color: #daebfa;
+}
+
+#randomSiteButton, #allSitesButton, #findByTagButton{
+    float: right;
+}
+
+#changePassButton{
+    margin-left: 1em;
+}
+
+#sites{
+    overflow-y: auto;
+    height: 500px;
+    text-align: center;
+}
+
+.slider {
+    -webkit-appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    outline: none;
+    opacity: 1.0;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%; 
+    background: #aed9ff;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #aed9ff;
+    cursor: pointer;
+  }
+  
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #2e628a;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+    
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #CC0000;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; 
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    text-align: center;
+    font-size: 20px;
+}
+  
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
+    width: 5%;
+}
+  
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-h3.domoAge {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
 }
 
-.domo:first-child {
-    margin-top: 10px;
+#leftAd, #rightAd{
+    background-color: #2e628a;
+    height: 1200px;
 }
 
-.domo:last-child {
-    margin-bottom:10px;
+img{
+    width: 100%;
+    margin-top: 3em;
 }
