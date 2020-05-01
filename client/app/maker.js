@@ -30,7 +30,7 @@ const handleSubmission = (e) => {
 const handleTag = (e) => {
     e.preventDefault();
 
-    sendAjax('GET', $("#tagForm").attr("action"), $("#tagForm").serialize(), (data) => {
+    sendAjax('POST', $("#tagForm").attr("action"), $("#tagForm").serialize(), (data) => {
         ReactDOM.render(
             <SiteList sites={data.sites} />, document.querySelector("#sites")
         );
@@ -108,7 +108,7 @@ const TagWindow = (props) => {
                 <option value="computers">computers</option>
             </select>
             <input type="hidden" name="_csrf" value={props.csrf}/>
-            <input className="formSubmit" type="submit" value="Get Tag's Sites"/>
+            <input className="formSubmit" type="submit" value="Get Sites"/>
         </form>
     )
 };

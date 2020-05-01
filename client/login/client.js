@@ -109,7 +109,7 @@ const TagWindow = (props) => {
                 <option value="computers">computers</option>
             </select>
             <input type="hidden" name="_csrf" value={props.csrf}/>
-            <input className="formSubmit" type="submit" value="Get Tag's Sites"/>
+            <input className="formSubmit" type="submit" value="Get Sites"/>
         </form>
     );
 };
