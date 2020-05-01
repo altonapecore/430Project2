@@ -1,3 +1,4 @@
+// Import a bunch of react stuff so that we can use their Card system
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Card from '@material-ui/core/Card';
@@ -6,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+// Handles submission of a new site
 const handleSubmission = (e) => {
     e.preventDefault();
 
@@ -19,6 +21,7 @@ const handleSubmission = (e) => {
         return false;
     }
 
+    // If the post was successful tell the user and then display their sites
     sendAjax('POST', $("#siteForm").attr("action"), $("#siteForm").serialize(), function() {
         handleSuccess("Site added successfully");
         siteSuccess($("#siteName"));
@@ -27,6 +30,7 @@ const handleSubmission = (e) => {
     return false;
 };
 
+// Handles a request to get all the sites that have the associated tag
 const handleTag = (e) => {
     e.preventDefault();
 
@@ -37,15 +41,18 @@ const handleTag = (e) => {
     });
 };
 
+// Hanldes the changing of password
 const handlePass = (e) => {
     e.preventDefault();
 
+    // If successful then tell the user and then show them their sites
     sendAjax('POST', $("#passForm").attr("action"), $("#passForm").serialize(), function() {
         handleSuccess("Password successfully changed");
         siteSuccess($("#siteName"));
-    })
-}
+    });
+};
 
+// The form for making a site
 const SiteForm = (props) => {
     return(
         <form 
@@ -71,6 +78,7 @@ const SiteForm = (props) => {
     );
 };
 
+// The form for changing the password
 const PassWindow = (props) => {
     return(
         <form 
@@ -90,6 +98,7 @@ const PassWindow = (props) => {
     )
 }
 
+// The form for getting a tag's sites
 const TagWindow = (props) => {
     return(
         <form
@@ -113,6 +122,7 @@ const TagWindow = (props) => {
     )
 };
 
+// Custom Card element where each card is a site
 const SiteList = function(props){
     if(props.sites.length === 0){
         return(
@@ -144,6 +154,7 @@ const SiteList = function(props){
     );
 };
 
+// Sends the ajax call to get a random site and then displays that site
 const getRandomSite = () => {
     sendAjax('GET', '/getSite', null, (data) => {
         ReactDOM.render(
@@ -152,6 +163,7 @@ const getRandomSite = () => {
     });
 };
 
+// Displays the Tag Window
 const createTagWindow = (csrf) => {
     ReactDOM.render(
         <TagWindow csrf={csrf} />,
@@ -159,6 +171,7 @@ const createTagWindow = (csrf) => {
     );
 };
 
+// Displays the user's sites
 const siteSuccess = () => {
     sendAjax('GET', '/getUserSites', null, (data) => {
         ReactDOM.render(
@@ -167,6 +180,7 @@ const siteSuccess = () => {
     });
 };
 
+// Displays all the sites in the database
 const getSites = () => {
     sendAjax('GET', '/getAllSites', null, (data) => {
         ReactDOM.render(
@@ -175,6 +189,7 @@ const getSites = () => {
     });
 };
 
+// Displays the Change Password Window
 const createPassWindow = (csrf) => {
     ReactDOM.render(
         <PassWindow csrf={csrf} />,
@@ -182,6 +197,8 @@ const createPassWindow = (csrf) => {
     );
 };
 
+
+// Gets references to all the buttons and adds listeners to them all
 const setup = function(csrf){
     const changePassButton = document.querySelector("#changePassButton");
     const randomSiteButton = document.querySelector("#randomSiteButton");
@@ -233,11 +250,13 @@ $(document).ready(function() {
     getToken();
 });
 
+// Creates a red popup
 const handleError = (message) => {
     $("#errorMessage").text(message);
     $("#myModal").css("display", "block");
 };
 
+// Creates a green popup
 const handleSuccess = (message) => {
     $("#errorMessage").text(message);
     $("#myModal").css("display", "block");

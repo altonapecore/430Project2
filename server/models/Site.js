@@ -35,6 +35,7 @@ SiteSchema.statics.toAPI = (doc) => ({
   tag: doc.tag,
 });
 
+// Searches the database for this specific tag and returns back all matches
 SiteSchema.statics.findByTag = (tag, callback) => {
   const search = {
     tag,
@@ -43,8 +44,10 @@ SiteSchema.statics.findByTag = (tag, callback) => {
   return SiteModel.find(search).select('siteName tag').lean().exec(callback);
 };
 
+// Gets all the sites
 SiteSchema.statics.findAll = (callback) => SiteModel.find().select('siteName tag').lean().exec(callback);
 
+// Gets all the sites a user has made
 SiteSchema.statics.findByUser = (creatorId, callback) => {
   const search = {
     creator: convertId(creatorId),
@@ -53,6 +56,7 @@ SiteSchema.statics.findByUser = (creatorId, callback) => {
   return SiteModel.find(search).select('siteName tag').lean().exec(callback);
 };
 
+// Gets one random site
 SiteSchema.statics.getSite = (callback) => {
   SiteModel.findAll((err, doc) => {
     if (err) {

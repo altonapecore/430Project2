@@ -88,7 +88,7 @@ const SignupWindow = (props) => {
             <input type="hidden" name="_csrf" value={props.csrf}/>
             <input className="formSubmit" type="submit" value="Sign in"/>
         </form>
-    )
+    );
 };
 
 const TagWindow = (props) => {
@@ -114,6 +114,7 @@ const TagWindow = (props) => {
     );
 };
 
+// Custom element where each site is displayed on a card
 const SiteList = function(props){
     if(props.sites.length === 0){
         return(
@@ -194,8 +195,9 @@ const createTagWindow = (csrf) => {
         <TagWindow csrf={csrf} />,
         document.querySelector("#content")
     );
-}
+};
 
+// Get references to the buttons and add listeners
 const setup = (csrf) => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");

@@ -2,6 +2,7 @@ const models = require('../models');
 
 const { Site } = models;
 
+// Creates a new site and saves it to the database
 const makeSite = (req, res) => {
   if (!req.body.siteName) {
     return res.status(400).json({ error: 'Site name is required' });
@@ -35,6 +36,7 @@ const getTagForm = (req, res) => {
   res.render('getByTag', { csrfToken: req.csrfToken() });
 };
 
+// Brings up the maker page
 const makerPage = (req, res) => {
   Site.SiteModel.findByUser(req.session.account._id,
     (err, docs) => {
@@ -47,7 +49,7 @@ const makerPage = (req, res) => {
     });
 };
 
-// Gets all sites for not
+// Gets all sites
 const getAllSites = (req, res) => Site.SiteModel.findAll((err, docs) => {
   if (err) {
     console.log(err);
