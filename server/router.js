@@ -7,7 +7,7 @@ const router = (app) => {
   app.get('/getUserSites', mid.requiresLogin, controllers.Site.getUserSites);
   app.get('/getAllSites', mid.requiresSecure, controllers.Site.getAllSites);
   app.post('/getByTag', mid.requiresSecure, controllers.Site.getByTag);
-  app.get('/getTagForm', mid.requiresSecure, controllers.Site.getTagForm)
+  app.get('/getTagForm', mid.requiresSecure, controllers.Site.getTagForm);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);

@@ -38,13 +38,13 @@ const getTagForm = (req, res) => {
 const makerPage = (req, res) => {
   Site.SiteModel.findByUser(req.session.account._id,
     (err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ error: 'An error occurred' });
-    }
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ error: 'An error occurred' });
+      }
 
-    return res.render('app', { csrfToken: req.csrfToken(), sites: docs });
-  });
+      return res.render('app', { csrfToken: req.csrfToken(), sites: docs });
+    });
 };
 
 // Gets all sites for not
@@ -66,20 +66,20 @@ const getUserSites = (req, res) => Site.SiteModel.findByUser(req.session.account
     }
 
     return res.json({ sites: docs });
-});
+  });
 
-const getByTag = (req, res) => Site.SiteModel.findByTag(req.body.tag, 
+const getByTag = (req, res) => Site.SiteModel.findByTag(req.body.tag,
   (err, docs) => {
-    if(err){
+    if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
     return res.json({ sites: docs });
-});
+  });
 
 const getRandomSite = (req, res) => Site.SiteModel.getSite((err, docs) => {
-  if(err){
+  if (err) {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred' });
   }

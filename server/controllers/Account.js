@@ -82,24 +82,25 @@ const changePass = (req, res) => {
   req.body.pass = `${req.body.pass}`;
   req.body.newPass = `${req.body.newPass}`;
 
-  if(!req.body.pass || !req.body.newPass){
-    return res.status(400).json({error: 'All fields are required'});
+  if (!req.body.pass || !req.body.newPass) {
+    return res.status(400).json({ error: 'All fields are required' });
   }
 
   // Check to see if the old pass and new pass are the same
   // If so shame them
-  if(req.body.pass === req.body.newPass){
-    return res.status(400).json({error: 'New password cannot be the same as the old one'});
+  if (req.body.pass === req.body.newPass) {
+    return res.status(400).json({ error: 'New password cannot be the same as the old one' });
   }
 
-  return Account.AccountModel.updatePassword(req.session.account.username, req.body.pass, req.body.newPass, (err, account) => {
-    if(err || !account) {
-      return res.status(401).json({ error: 'Password is incorrect' });
-    }
+  return Account.AccountModel.updatePassword(req.session.account.username, req.body.pass,
+    req.body.newPass, (err, account) => {
+      if (err || !account) {
+        return res.status(401).json({ error: 'Password is incorrect' });
+      }
 
-    return res.json({ message: 'Password updated successfully'});
-  })
-}
+      return res.json({ message: 'Password updated successfully' });
+    });
+};
 
 const getToken = (req, res) => {
   const csrfJSON = {
